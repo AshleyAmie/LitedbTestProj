@@ -1,0 +1,15 @@
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LitedbTestProj.exe
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.csprojAssemblyReference.cache
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.AssemblyInfoInputs.cache
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.AssemblyInfo.cs
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LiteDB.dll
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.csproj.CopyComplete
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LitedbTestProj.deps.json
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LitedbTestProj.runtimeconfig.json
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LitedbTestProj.runtimeconfig.dev.json
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LitedbTestProj.dll
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\bin\Debug\netcoreapp3.1\LitedbTestProj.pdb
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.csproj.CoreCompileInputs.cache
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.dll
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.pdb
+C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\obj\Debug\netcoreapp3.1\LitedbTestProj.genruntimeconfig.cache

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "yz3A5D3S+7zgBI/4ELqV2wlxOx7c91Jv2OhBnWdKdxHa1adFdZeO2Q/0R1Z53K3EqMyncyHOradvmYoYFvGD+w==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Ashley Johansson\\Documents\\Intern\\TestProj\\LitedbTestProj\\LitedbTestProj\\LitedbTestProj.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Ashley Johansson\\.nuget\\packages\\litedb\\5.0.9\\litedb.5.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
