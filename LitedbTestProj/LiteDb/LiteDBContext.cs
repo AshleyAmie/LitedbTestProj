@@ -21,7 +21,6 @@ public class LiteDBContext
     // Creates the Texture table
     public void CreateTables()
     {
-        string currentDirectory = Directory.GetCurrentDirectory();
         databasePath = Path.Combine(@"C:\Users\Ashley Johansson\Documents\Intern\TestProj\LitedbTestProj\LitedbTestProj\TempDB");
         FilePath = Path.Combine(databasePath, "Litedb.db");
         bool createDefaults = false;
