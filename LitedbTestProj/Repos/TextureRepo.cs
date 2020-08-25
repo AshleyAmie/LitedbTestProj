@@ -21,13 +21,19 @@ namespace LitedbTestProj.Repos
 
         public void AddTexture(TextureModel texture)
         {
-            context.Textures.Insert(texture);
+            if (ModelVerification(texture))
+            {
+                context.Textures.Insert(texture);
+            }
         }
 
         public bool DeleteTexture(TextureModel texture)
         {
-            bool deleted;
-            deleted = context.Textures.Delete(texture.ID);
+            bool deleted = false;
+            if (ModelVerification(texture))
+            {
+                deleted = context.Textures.Delete(texture.ID);
+            }
             return deleted;
         }
 
@@ -55,39 +61,52 @@ namespace LitedbTestProj.Repos
         public bool UpdateTexture(TextureModel texture, string keyVar, string valueVar)
         {
             bool updated;
-            if ( keyVar != "Name" && keyVar != "name" && 
+            if (ModelVerification(texture))
+            {
+                if (keyVar != "Name" && keyVar != "name" &&
                  keyVar != "IsGrained" && keyVar != "isgrained" &&
                  keyVar != "RealWorldWidth" && keyVar != "realworldwidth" &&
                  keyVar != "RealWorldHeight" && keyVar != "realworldheight")
-            {
-                throw new Exception();
-            }
-            else
-            {
-                if (keyVar == "Name" || keyVar == "name")
                 {
-                    texture.Name = valueVar;
+                    throw new Exception();
                 }
-                else if (keyVar == "IsGrained" || keyVar == "isgrained")
+                else
                 {
-                    if (valueVar == "true" || valueVar == "True") { texture.IsGrained = true; }
-                    else if (valueVar == "false" || valueVar == "False") { texture.IsGrained = false; }
-                    else { throw new Exception(); }
-                }
-                else if (keyVar == "RealWorldWidth" || keyVar == "realworldwidth")
-                {
-                    var realWorldWidth = Convert.ToDouble(valueVar);
-                    texture.RealWorldWidth = realWorldWidth;
-                }
-                else if (keyVar == "RealWorldHeight" || keyVar == "realworldheight")
-                {
-                    var realWorldHeight = Convert.ToDouble(valueVar);
-                    texture.RealWorldHeight = realWorldHeight;
+                    if (keyVar == "Name" || keyVar == "name")
+                    {
+                        texture.Name = valueVar;
+                    }
+                    else if (keyVar == "IsGrained" || keyVar == "isgrained")
+                    {
+                        if (valueVar == "true" || valueVar == "True") { texture.IsGrained = true; }
+                        else if (valueVar == "false" || valueVar == "False") { texture.IsGrained = false; }
+                        else { throw new Exception(); }
+                    }
+                    else if (keyVar == "RealWorldWidth" || keyVar == "realworldwidth")
+                    {
+                        var realWorldWidth = Convert.ToDouble(valueVar);
+                        texture.RealWorldWidth = realWorldWidth;
+                    }
+                    else if (keyVar == "RealWorldHeight" || keyVar == "realworldheight")
+                    {
+                        var realWorldHeight = Convert.ToDouble(valueVar);
+                        texture.RealWorldHeight = realWorldHeight;
+                    }
                 }
             }
 
             updated = context.Textures.Update(texture);
             return updated;
+        }
+
+        public static bool ModelVerification(TextureModel model)
+        {
+            bool isValid = false;
+            if (true)
+            {
+                isValid = true;
+            }
+            return isValid;
         }
     }
 }
