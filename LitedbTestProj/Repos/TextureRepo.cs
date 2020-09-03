@@ -6,24 +6,34 @@ using LiteDB;
 
 namespace LitedbTestProj.Repos
 {
-    public class TextureRepo : ITextureRepo
+    public class TextureRepo
     {
         private LiteDBContext context;
+        private IGenericRepo<TextureModel> genericRepo;
 
         private ILiteCollection<TextureModel> textures;
 
-        public TextureRepo(LiteDBContext c)
+        public TextureRepo(LiteDBContext c, IGenericRepo<TextureModel> repository)
         {
+            genericRepo = repository;
             context = c;
-            textures = context.Textures;
+            textures = context.litedb.GetCollection<TextureModel>("textures");
+            if (textures.Count() == 0)
+                context.LoadDefaultTextureDirectoryIntoDatabase(Textures);
+            for (int i = 1; i <= textures.Count(); i++)
+            {
+                var t = textures.FindById(i);
+                genericRepo.Insert(t);
+            }
+
         }
-        public ILiteCollection<TextureModel> Textures => textures;
+        public ILiteCollection<TextureModel> Textures => genericRepo.GetAll();
 
         public void AddTexture(TextureModel texture)
         {
             if (ModelVerification(texture))
             {
-                context.Textures.Insert(texture);
+                genericRepo.Insert(texture);
             }
         }
 
@@ -32,29 +42,29 @@ namespace LitedbTestProj.Repos
             bool deleted = false;
             if (ModelVerification(texture))
             {
-                deleted = context.Textures.Delete(texture.ID);
+                genericRepo.Delete(texture.ID);
+                deleted = true;
             }
             return deleted;
         }
 
         public bool DeleteTextures(ILiteCollection<TextureModel> textures)
         {
-            var totalCount = textures.Count();
-            var deleteCount = context.Textures.DeleteAll();
-            if (totalCount == deleteCount)
+            bool deleted = genericRepo.DeleteAll();
+            if (deleted)
                 return true;
             else return false;
         }
 
         public TextureModel GetTextureById(int id)
         {
-            var texture = context.Textures.FindById(id);
+            var texture = genericRepo.GetById(id);
             return texture;
         }
 
         public TextureModel GetTextureByName(string name)
         {
-            var texture = context.Textures.FindOne(x => x.Name == name);
+            var texture = genericRepo.GetAll().FindOne(x => x.Name == name);
             return texture;
         }
 
@@ -95,7 +105,8 @@ namespace LitedbTestProj.Repos
                 }
             }
 
-            updated = context.Textures.Update(texture);
+            updated = genericRepo.Update(texture);
+
             return updated;
         }
 

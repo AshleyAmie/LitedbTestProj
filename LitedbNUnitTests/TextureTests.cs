@@ -13,18 +13,20 @@ namespace LitedbNUnitTests
     /// <summary>
     /// Tests for Texture Model CRUD operations
     /// </summary>
+    [TestFixture()]
     public class TextureTests
     {
-        private ITextureRepo repo;
+        private IGenericRepo<TextureModel> genericRepo;
+        private TextureRepo repo;
         private LiteDBContext context;
         private LiteDatabase db;
+        private ILiteCollection<TextureModel> textures;
 
         [Test]
         public void AddTextureTest()
         {
             //Arrange
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             using (db = context.litedb)
             {
                 TextureModel texture = new TextureModel()
@@ -39,12 +41,16 @@ namespace LitedbNUnitTests
                 repo.AddTexture(texture);
 
                 // Assert
-                Assert.AreEqual("Pink", repo.Textures.FindById(texture.ID).Name);
-                Assert.AreEqual(4, repo.Textures.Count());
+                Assert.AreEqual("Pink", genericRepo.GetById(texture.ID).Name);
+                Assert.AreEqual(4, genericRepo.GetAll().Count());
 
                 Console.WriteLine("ID: " + texture.ID + " Name: " + texture.Name +
                     " Width: " + texture.RealWorldWidth + " Height: " + texture.RealWorldHeight);
 
+                for (int i = 1; i <= genericRepo.GetAll().Count(); i++)
+                {
+                    Console.WriteLine("ID: " + genericRepo.GetById(i).ID + " Name: " + genericRepo.GetById(i).Name);
+                }
 
                 // Clean Up
                 DeleteTextures();
@@ -55,21 +61,10 @@ namespace LitedbNUnitTests
         public void DeleteTexturesTest()
         {
             //Arrange
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             bool delete;
             using (db = context.litedb)
             {
-                TextureModel texture = new TextureModel()
-                {
-                    Name = "Pink",
-                    IsGrained = false,
-                    RealWorldHeight = 15,
-                    RealWorldWidth = 15
-                };
-
-                // Act
-                repo.AddTexture(texture);
 
                 // Act
                 delete = repo.DeleteTextures(repo.Textures);
@@ -83,23 +78,13 @@ namespace LitedbNUnitTests
         public void DeleteTextureTest()
         {
             //Arrange
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             bool delete;
             TextureModel t1;
             using (db = context.litedb)
             {
-                TextureModel texture = new TextureModel()
-                {
-                    Name = "Pink",
-                    IsGrained = false,
-                    RealWorldHeight = 15,
-                    RealWorldWidth = 15
-                };
-                t1 = context.Textures.FindById(1);
+                t1 = genericRepo.GetById(1);
 
-                // Act
-                repo.AddTexture(texture);
 
                 // Act
                 delete = repo.DeleteTexture(t1);
@@ -116,19 +101,20 @@ namespace LitedbNUnitTests
         public void GetTexturesTest()
         {
             // Arrange
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
 
             // Act
             using (db = context.litedb)
             {
-                var textures = repo.Textures;
-                var textures2 = db.GetCollection<TextureModel>("textures");
+                var textures2 = repo.Textures;
 
                 // Assert
                 Assert.AreEqual(textures2.Count(), textures.Count());
                 Assert.IsTrue(textures2.FindById(1).ToString() == textures.FindById(1).ToString());
                 Assert.IsTrue(textures2.FindById(textures2.Count()).ToString() == textures.FindById(textures.Count()).ToString());
+
+                // CleanUp
+                DeleteTextures();
             }
 
         }
@@ -137,17 +123,19 @@ namespace LitedbNUnitTests
         public void GetTextureByIDTest()
         {
             // Arrange
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
 
             // Act
             using (db = context.litedb)
             {
                 var texture = repo.GetTextureById(1);
-                var texture2 = context.Textures.FindById(1);
+                var texture2 = textures.FindById(1);
 
                 // Assert
                 Assert.AreEqual(texture2.Name, texture.Name);
+
+                // Clean Up
+                DeleteTextures();
             }
         }
 
@@ -155,18 +143,20 @@ namespace LitedbNUnitTests
         public void GetTextureByNameTest()
         {
             // Arrange
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
 
             // Act
             using (db = context.litedb)
             {
                 var texture = repo.GetTextureByName("Shiny");
-                var texture2 = context.Textures.FindOne(x => x.Name == "Shiny");
+                var texture2 = textures.FindOne(x => x.Name == "Shiny");
 
                 // Assert
                 Assert.AreEqual(texture2.Name, texture.Name);
                 Assert.AreEqual(texture2.ID, texture.ID);
+
+                // Clean Up
+                DeleteTextures();
             }
 
         }
@@ -175,8 +165,7 @@ namespace LitedbNUnitTests
         public void UpdateTextureNameTest()
         {
             // Arrange 
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             TextureModel t2, t1;
             bool updated;
 
@@ -184,7 +173,7 @@ namespace LitedbNUnitTests
             using (db = context.litedb)
             {
                 t2 = repo.GetTextureById(1);
-                t1 = context.Textures.FindById(1);
+                t1 = textures.FindById(1);
 
                 updated = repo.UpdateTexture(t2, "Name", "New Name");
 
@@ -193,10 +182,10 @@ namespace LitedbNUnitTests
                 Assert.IsTrue(updated);
 
                 Console.WriteLine("t1: " + t1.Name + "  " + "t2: " + t2.Name);
-            }
 
-            // CleanUp
-            DeleteTexturesTest();
+                // CleanUp
+                DeleteTextures();
+            }
 
         }
 
@@ -204,8 +193,7 @@ namespace LitedbNUnitTests
         public void UpdateTextureIsGrainedTest()
         {
             // Arrange 
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             TextureModel t2, t1;
             bool updated;
 
@@ -213,7 +201,7 @@ namespace LitedbNUnitTests
             using (db = context.litedb)
             {
                 t2 = repo.GetTextureById(1);
-                t1 = context.Textures.FindById(1);
+                t1 = textures.FindById(1);
 
                 updated = repo.UpdateTexture(t2, "IsGrained", "true");
 
@@ -224,10 +212,10 @@ namespace LitedbNUnitTests
 
                 Console.WriteLine("t1: " + t1.Name + "  " + t1.IsGrained + " " + 
                     "t2: " + t2.Name + " " + t2.IsGrained.ToString());
+                // CleanUp
+                DeleteTextures();
             }
 
-            // CleanUp
-            DeleteTexturesTest();
 
         }
 
@@ -235,8 +223,7 @@ namespace LitedbNUnitTests
         public void UpdateTextureRealWorldWidthTest()
         {
             // Arrange 
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             TextureModel t2, t1;
             bool updated;
 
@@ -244,7 +231,7 @@ namespace LitedbNUnitTests
             using (db = context.litedb)
             {
                 t2 = repo.GetTextureById(1);
-                t1 = context.Textures.FindById(1);
+                t1 = textures.FindById(1);
 
                 updated = repo.UpdateTexture(t2, "realworldwidth", "12");
 
@@ -256,18 +243,17 @@ namespace LitedbNUnitTests
 
                 Console.WriteLine("t1: " + t1.Name + "  " + t1.RealWorldWidth.ToString() + " " +
                     "t2: " + t2.Name + " " + t2.RealWorldWidth.ToString());
+                // CleanUp
+                DeleteTextures();
             }
 
-            // CleanUp
-            DeleteTexturesTest();
         }
 
         [Test]
         public void UpdateTextureRealWorldHeightTest()
         {
             // Arrange 
-            context = new LiteDBContext();
-            repo = new TextureRepo(context);
+            SetUp();
             TextureModel t2, t1;
             bool updated;
 
@@ -275,7 +261,7 @@ namespace LitedbNUnitTests
             using (db = context.litedb)
             {
                 t2 = repo.GetTextureById(1);
-                t1 = context.Textures.FindById(1);
+                t1 = textures.FindById(1);
 
                 updated = repo.UpdateTexture(t2, "realworldheight", "12");
 
@@ -294,11 +280,25 @@ namespace LitedbNUnitTests
         }
 
         /// <summary>
+        /// Arrange db, controller, and collection
+        /// </summary>
+        public void SetUp()
+        {
+            context = new LiteDBContext();
+            genericRepo = new GenericRepo<TextureModel>(context);
+            textures = context.litedb.GetCollection<TextureModel>("textures");
+            if (textures.Count() == 0)
+                context.LoadDefaultTextureDirectoryIntoDatabase(textures);
+            repo = new TextureRepo(context, genericRepo);
+        }
+
+        /// <summary>
         /// Deletes the test-created repository of textures
         /// </summary>
         public void DeleteTextures()
         {
-            repo.Textures.DeleteAll();
+            genericRepo.DeleteAll();
+            //repo.Textures.DeleteAll();
         }
     }
 }

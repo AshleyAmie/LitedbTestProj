@@ -38,11 +38,11 @@ public class LiteDBContext
         litedb = new LiteDatabase(FilePath);
 
         // Gets the Texture collection if it exists, otherwise, it creates one
-        Textures = litedb.GetCollection<TextureModel>("textures");
-        if (Textures.Count() <= 0)
-        {
-            createDefaults = true;
-        }
+        //Textures = litedb.GetCollection<TextureModel>("textures");
+        //if (Textures.Count() <= 0)
+        //{
+        //    createDefaults = true;
+        //}
 
         if (createDefaults)
         {
@@ -51,7 +51,7 @@ public class LiteDBContext
         }
     }
 
-    private void LoadDefaultTextureDirectoryIntoDatabase(ILiteCollection<TextureModel> textures)
+    public void LoadDefaultTextureDirectoryIntoDatabase(ILiteCollection<TextureModel> textures)
     {
         // Create some default textures
         TextureModel t1 = new TextureModel
